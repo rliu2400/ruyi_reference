@@ -28,6 +28,16 @@ template <typename T> class SegTree {
     std::vector<T> v; // v[0] is unused
     int N;
 
+    void build(std::vector<T> &arr, int i, int l, int r) {
+        if (l == r) {
+            v[i] = arr[l];
+            return;
+        }
+        int m = (l + r) / 2;
+        build(arr, 2 * i, l, m);
+        build(arr, 2 * i + 1, m + 1, r);
+    }
+
     void update(int i, int l, int r, int qi,
                 T x) { // any associative binary operation over a monoid
         if (l == r) {
@@ -59,7 +69,7 @@ template <typename T> class SegTree {
   public:
     SegTree(int N) : N(N), v(4 * N) {} // the 4 * N is for padding
 
-    SegTree(std::vector<T> arr) : N(arr.size()), v(4 * arr.size()) {}
+    SegTree(std::vector<T> arr) : N(arr.size()), v(4 * arr.size()) { build(arr, 1, 0, N - 1); }
 
     void update(int i, T x) { update(1, 0, N - 1, i, x); } // indices 0...N - 1 of the underlying array
 
