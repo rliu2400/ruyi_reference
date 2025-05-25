@@ -28,7 +28,7 @@ template <typename T> class SegTree {
     std::vector<T> v; // v[0] is unused
     int N;
 
-    void build(std::vector<T> &arr, int i, int l, int r) {
+    void build(const std::vector<T> &arr, int i, int l, int r) {
         if (l == r) {
             v[i] = arr[l];
             return;
@@ -36,6 +36,7 @@ template <typename T> class SegTree {
         int m = (l + r) / 2;
         build(arr, 2 * i, l, m);
         build(arr, 2 * i + 1, m + 1, r);
+        v[i] = v[2 * i] + v[2 * i + 1];
     }
 
     void update(int i, int l, int r, int qi,
@@ -55,15 +56,12 @@ template <typename T> class SegTree {
     }
 
     T query(int i, int l, int r, int ql, int qr) {
+        if (qr < l || r < ql)
+            return T(0);
         if (ql <= l && r <= qr)
             return v[i];
-        T ans = 0;
         int m = (l + r) / 2;
-        if (ql <= m)
-            ans += query(2 * i, l, m, ql, qr);
-        if (qr > m)
-            ans += query(2 * i + 1, m + 1, r, ql, qr);
-        return ans;
+        return query(2 * i, l, m, ql, qr) + query(2 * i + 1, m + 1, r, ql, qr);
     }
 
   public:
@@ -73,5 +71,5 @@ template <typename T> class SegTree {
 
     void update(int i, T x) { update(1, 0, N - 1, i, x); } // indices 0...N - 1 of the underlying array
 
-    T query(int l, int r) { query(1, 0, N - 1, l, r); }
+    T query(int l, int r) { return query(1, 0, N - 1, l, r); }
 };
