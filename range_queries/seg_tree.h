@@ -45,7 +45,7 @@ template <typename T> class SegTree {
     }
 
     T query(int i, int l, int r, int ql, int qr) {
-        if (l == r)
+        if (ql <= l && r <= qr)
             return v[i];
         T ans = 0;
         int m = (l + r) / 2;
