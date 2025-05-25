@@ -11,6 +11,17 @@ template <typename T> class SegTree {
     std::vector<T> v, lazy; // v[0] is unused
     int N;
 
+    void build(const std::vector<T> &arr, int i, int l, int r) {
+        if (l == r) {
+            v[i] = arr[l];
+            return;
+        }
+        int m = (l + r) / 2;
+        build(arr, 2 * i, l, m);
+        build(arr, 2 * i + 1, m + 1, r);
+        v[i] = v[2 * i] + v[2 * i + 1];
+    }
+
     void apply(int i, int l, int r, T val) {
         v[i] += (r - l + 1) * val;
         lazy[i] += val;
@@ -33,6 +44,7 @@ template <typename T> class SegTree {
             return;
         }
 
+        push(i, l, r);
         int m = (l + r) / 2;
         update(2 * i, l, m, ql, qr, x);
         update(2 * i + 1, m + 1, r, ql, qr, x);
@@ -45,18 +57,21 @@ template <typename T> class SegTree {
             return T(0);
         if (ql <= l && r <= qr)
             return v[i];
+        push(i, l, r);
         int m = (l + r) / 2;
         return query(2 * i, l, m, ql, qr) + query(2 * i + 1, m + 1, r, ql, qr);
     }
 
   public:
-    SegTree(int N) : N(N), v(4 * N) {} // the 4 * N is for pupdateing
+    SegTree(int N) : N(N), v(4 * N), lazy(4 * N) {} // the 4 * N is for updating
 
-    SegTree(std::vector<T> arr) : N(arr.size()), v(4 * arr.size()) {}
+    SegTree(const std::vector<T> &arr) : N(arr.size()), v(4 * arr.size()), lazy(4 * arr.size()) {
+        build(arr, 1, 0, N - 1);
+    }
 
     void update(int i, T x) { update(1, 0, N - 1, i, i, x); } // indices 0...N - 1 of the underlying array
 
     void update(int l, int r, T x) { update(1, 0, N - 1, l, r, x); }
 
-    T query(int l, int r) { query(1, 0, N - 1, l, r); }
+    T query(int l, int r) { return query(1, 0, N - 1, l, r); }
 };
