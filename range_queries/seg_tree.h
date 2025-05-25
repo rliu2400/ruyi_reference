@@ -28,7 +28,8 @@ template <typename T> class SegTree {
     std::vector<T> v; // v[0] is unused
     int N;
 
-    void add(int i, int l, int r, int qi, T x) { // any associative binary operation over a monoid (set with id element)
+    void update(int i, int l, int r, int qi,
+                T x) { // any associative binary operation over a monoid (set with id element)
         if (l == r) {
             v[i] += x;
             return;
@@ -36,9 +37,9 @@ template <typename T> class SegTree {
 
         int m = (l + r) / 2;
         if (qi <= m)
-            add(2 * i, l, m, qi, x);
+            update(2 * i, l, m, qi, x);
         if (qi > m)
-            add(2 * i + 1, m + 1, r, qi, x);
+            update(2 * i + 1, m + 1, r, qi, x);
 
         v[i] = v[2 * i] + v[2 * i + 1];
     }
@@ -60,7 +61,7 @@ template <typename T> class SegTree {
 
     SegTree(std::vector<T> arr) : N(arr.size()), v(4 * arr.size()) {}
 
-    void add(int i, T x) { add(1, 0, N - 1, i, x); } // indices 0...N - 1 of the underlying array
+    void update(int i, T x) { update(1, 0, N - 1, i, x); } // indices 0...N - 1 of the underlying array
 
     T query(int l, int r) { query(1, 0, N - 1, l, r); }
 };
