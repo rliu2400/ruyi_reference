@@ -29,7 +29,7 @@ template <typename T> class SegTree {
     int N;
 
     void update(int i, int l, int r, int qi,
-                T x) { // any associative binary operation over a monoid (set with id element)
+                T x) { // any associative binary operation over a monoid
         if (l == r) {
             v[i] += x;
             return;
