@@ -2,7 +2,7 @@
 #include <utility>
 #include <vector>
 
-std::vector<int> shortest_path(int start, int N,
+std::vector<int> dijkstra(int start, int N,
                                const std::vector<std::vector<std::pair<int, int>>> &AL) { // weight, node
 
     std::vector<int> dist(N, INT_MAX);
