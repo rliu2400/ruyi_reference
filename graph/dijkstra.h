@@ -15,8 +15,8 @@ std::vector<int> shortest_path(int start, int N,
         if (dist[u] != -1)
             continue;
         dist[u] = w;
-        for (std::pair<int, int> p : AL[u]) {
-            pq.emplace(w + p.first, p.second);
+        for (auto [w, v] : AL[u]) {
+            pq.emplace(dist[u] + w, v);
         }
     }
 
