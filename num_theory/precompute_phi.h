@@ -1,3 +1,6 @@
+// precompute Euler's Totient Function
+// Same idea as Sieve of Eratosthenes.
+// Time Complexity: O(N log log N)
 void precompute(vector<int> &phi, int N) {
     for (int i = 1; i <= N; i++)
         phi[i] = i;
